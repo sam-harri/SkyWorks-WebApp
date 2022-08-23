@@ -66,6 +66,71 @@ class TableCsv {
         `
     );
   }
+
+  static regex(num) {
+    num = num.toString()
+  if (num === "0") {
+    return 0;
+  }
+
+  num = num.slice(1, -1);
+
+  if (num.slice(-1)[0] === "u") {
+    return Number.parseFloat(num.slice(0, -1)) * 1e-06;
+  } else {
+    if (num.slice(-1)[0] === "m") {
+      return Number.parseFloat(num.slice(0, -1)) * 0.001;
+    }
+  }
+  }
+
+  static reverseRegex(num){
+    if (Math.abs(num)>0.001) {
+      num = num*1000;
+      num = num.toString()
+      return num.slice(0,1) == "-" ? num.toString().slice(0,4) + "m" : num.toString().slice(0,3) + "m";
+    } else {
+      if (Math.abs(num)>0.00001) {
+        num = num*1000000
+        num = num.toString()
+        return num.slice(0,1) == "-" ? num.toString().slice(0,4) + "u" : num.toString().slice(0,3) + "u";
+      }
+    }
+  }
+
+
+
+/**
+ * 
+ * @param {string[][]} arr 2D array from CSV
+ * @param {int} gateWidth Gate Width
+ * @param {int} numFingers Number of Fingers
+ */
+ static formatArrLongTime(arr,gateWidth,numFingers){
+  arr[0].push("JD");
+  const devicesize = (gateWidth*numFingers)/1000;
+  for (var i = arr.length-1; i > 0; i--){
+    if (arr[i][2] < 1) {
+      arr.splice(i,1)
+    } else {
+    arr[i].push(TableCsv.reverseRegex(TableCsv.regex(arr[i][0]) / devicesize))
+    arr[i][0] == 0 ? 0 : arr[i][0] = arr[i][0].toString().slice(1,-1);
+    arr[i][1] == 0 ? 0 : arr[i][1] = arr[i][1].toString().slice(1,-1);
+    }
+  }
+
+  arr[0].splice(3,1);
+  arr[0].splice(0,0,"Time");
+  var time = 0.0;
+  for(var i = 1; i <arr.length; i++){
+    arr[i].splice(3,1);
+    arr[i].splice(0,0,time);
+    time += 0.5;
+  }
+
+  return arr
+}
+  
 }
 
 const tableRoot = document.querySelector("#csvRoot");
@@ -73,11 +138,17 @@ const csvFileInput = document.querySelector("#csvFileInput");
 const tableCsv = new TableCsv(tableRoot);
 
 csvFileInput.addEventListener("change", (e) => {
-  Papa.parse(csvFileInput.files[0], {
-    delimiter: ",",
-    skipEmptyLines: true,
-    complete: (results) => {
-      tableCsv.update(results.data.slice(1), results.data[0]);
-    }
-  });
+  tableCsv.clear();
+  const fr = new FileReader();
+  fr.onloadend=e=>{
+    let r = fr.result.split("\n").
+    map(e=>{
+      return e.split(",")
+    });
+    var gateWidth = document.querySelector('#gateWidth').value;
+    var numFingers = document.querySelector('#numFingers').value;
+    tableCsv.update(TableCsv.formatArrLongTime(r,gateWidth,numFingers));
+  }
+  document.querySelector('#longTimeImage').src="static/img/MatPlotLibChart.png";
+  fr.readAsText(csvFileInput.files[0]);
 });

@@ -1,9 +1,10 @@
+from urllib import request
 from flask import Blueprint, render_template, url_for
-
+import os
 
 views = Blueprint('views', __name__)
 
-@views.route('/')
+@views.route('/', methods=['GET', 'POST'])
 @views.route('/home', methods=['GET', 'POST'])
 def home():
     return render_template('home.html', boolean=True)

@@ -47,25 +47,39 @@
 <!--"table-bordered table-hover table-responsive CSVTable"-->
 <div class="container-fluid">
 <div class="row">
-	<div class="col-lg-4" style="height:600px; overflow-y: scroll;">
+	<div class="col-lg-4">
 		<h2 style="text-align: center ;">CSV Data</h2>
 		<hr>
-		<div class="input-group" style="padding-bottom: 1rem;">
-			<div class="custom-file">
-				<input type="file" class="custom-file-input" id="csvFileInput">
-			  	<label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+		<div class="col-xl-12" style="height:600px; overflow-y: scroll;">
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+				<span class="input-group-text" id="basic-addon1">Gate Width </span>
+				</div>
+			<input type="number" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="gateWidth">
 			</div>
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+				<span class="input-group-text"  id="basic-addon1"># Fingers &nbsp;&nbsp;</span>
+				</div>
+			<input type="number" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="numFingers">
+			</div>
+			<div class="input-group" style="padding-bottom: 1rem;">
+				<div class="custom-file">
+					<input type="file" class="custom-file-input" id="csvFileInput">
+					<label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+				</div>
+			</div>
+			<table id="csvRoot" class="table table-data table-bordered table-hover padding"></table>
+			<script src="https://cdn.jsdelivr.net/npm/papaparse@5.2.0/papaparse.min.js"></script>
+			<script type="text/javascript" src="{{ url_for('static', filename='js/TableCsv.js')}}"></script>
 		</div>
-		<table id="csvRoot" class="table table-data table-bordered table-hover padding"></table>
-		<script src="https://cdn.jsdelivr.net/npm/papaparse@5.2.0/papaparse.min.js"></script>
-		<script type="text/javascript" src="{{ url_for('static', filename='js/TableCsv.js')}}"></script>
 	</div>
 	<div class="chart-area col-lg-8">
 		<h2 style="text-align: center ;">VD & JD vs Logarithmic Time</h2>
 		<hr>
-		<img src="{{ url_for('static', filename='img/MatPlotLibChart.png')}}">
+		<img src="" id="longTimeImage">
 	</div>
 </div>
 </div>
 
-<!--- Footer -->
+<!--- {{ url_for('static', filename='img/MatPlotLibChart.png')}} -->
