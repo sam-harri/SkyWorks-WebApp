@@ -134,8 +134,8 @@ class TableCsv {
 
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
-const tableRoot = document.querySelector("#csvRoot");
-const csvFileInput = document.querySelector("#csvFileInput");
+const tableRoot = document.querySelector("#csvRootLong");
+const csvFileInput = document.querySelector("#csvFileInputLong");
 const tableCsv = new TableCsv(tableRoot);
 
 csvFileInput.addEventListener("change", (e) => {
@@ -146,8 +146,8 @@ csvFileInput.addEventListener("change", (e) => {
     map(e=>{
       return e.split(",")
     });
-    var gateWidth = document.querySelector('#gateWidth').value;
-    var numFingers = document.querySelector('#numFingers').value;
+    var gateWidth = document.querySelector('#gateWidthLong').value;
+    var numFingers = document.querySelector('#numFingersLong').value;
     var newtable = TableCsv.formatArrLongTime(r,gateWidth,numFingers)
     tableCsv.update(newtable);
     timeValues = [];
@@ -174,6 +174,5 @@ csvFileInput.addEventListener("change", (e) => {
     Plotly.newPlot('longPlot', data, layout);
   }
   //document.querySelector('#longTimeImage').src="static/img/MatPlotLibChart.png";
-  
   fr.readAsText(csvFileInput.files[0]);
 });

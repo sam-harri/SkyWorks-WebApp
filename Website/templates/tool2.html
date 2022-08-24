@@ -28,7 +28,7 @@
 			<li class="nav-item">
 				<a class="nav-link mx-3" id="tool1" href="tool1">Tool 1</a>
 			</li>
-			<li class="nav-item">
+            <li class="nav-item">
 				<a class="nav-link mx-3" id="tool2" href="tool2">Tool 2</a>
 			</li>
 		</ul>
@@ -36,53 +36,5 @@
 </div>
 </nav>
 <!--- Tool Description -->
-<div class="container-fluid">
-<div class="row jumbotron">
-	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
-		<div class="col-12">
-			<h1 class="display-4">Long P-IV(t)</h1>
-		</div>
-		<p class="lead">Long time frame drain lag graphing, both JD and VD with respect logarithmic time are plotted using the data inputed from the CSV section on the right.</p>
-	</div>
-</div>
-</div>
-
-<!--"table-bordered table-hover table-responsive CSVTable"-->
-<div class="container-fluid">
-<div class="row">
-	<div class="col-lg-4">
-		<h2 style="text-align: center ;">CSV Data</h2>
-		<hr>
-		<div class="col-xl-12" style="height:600px; overflow-y: scroll;">
-			<div class="input-group mb-3">
-				<div class="input-group-prepend">
-				<span class="input-group-text" id="basic-addon1">Gate Width </span>
-				</div>
-			<input type="number" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="gateWidthLong">
-			</div>
-			<div class="input-group mb-3">
-				<div class="input-group-prepend">
-				<span class="input-group-text"  id="basic-addon1"># Fingers &nbsp;&nbsp;</span>
-				</div>
-			<input type="number" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="numFingersLong">
-			</div>
-			<div class="input-group" style="padding-bottom: 1rem;">
-				<div class="custom-file">
-					<input type="file" class="custom-file-input" id="csvFileInputLong">
-					<label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-				</div>
-			</div>
-			<table id="csvRootLong" class="table table-data table-bordered table-hover padding"></table>
-			<script type="text/javascript" src="{{ url_for('static', filename='js/TableCsv.js')}}"></script>
-		</div>
-	</div>
-	<div class="chart-area col-lg-8">
-		<h2 style="text-align: center ;">VD & JD vs Logarithmic Time</h2>
-		<hr>
-		<script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
-		<div id="longPlot"></div>
-	</div>
-</div>
-</div>
 
 <!--- {{ url_for('static', filename='img/MatPlotLibChart.png')}} -->

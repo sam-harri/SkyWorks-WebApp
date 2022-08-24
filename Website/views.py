@@ -12,3 +12,7 @@ def home():
 @views.route('/tool1', methods=['GET', 'POST'])
 def tool1():
     return render_template('tool1.html')
+
+@views.route('/tool2', methods=['GET', 'POST'])
+def tool2():
+    return render_template('tool2.html')
