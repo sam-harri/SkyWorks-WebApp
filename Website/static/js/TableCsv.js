@@ -69,19 +69,19 @@ class TableCsv {
 
   static regex(num) {
     num = num.toString()
-  if (num === "0") {
-    return 0;
-  }
-
-  num = num.slice(1, -1);
-
-  if (num.slice(-1)[0] === "u") {
-    return Number.parseFloat(num.slice(0, -1)) * 1e-06;
-  } else {
-    if (num.slice(-1)[0] === "m") {
-      return Number.parseFloat(num.slice(0, -1)) * 0.001;
+    if (num === "0") {
+      return 0;
     }
-  }
+
+    num = num.slice(1, -1);
+
+    if (num.slice(-1)[0] === "u") {
+      return Number.parseFloat(num.slice(0, -1)) * 1e-06;
+    } else {
+      if (num.slice(-1)[0] === "m") {
+        return Number.parseFloat(num.slice(0, -1)) * 0.001;
+      }
+    }
   }
 
   static reverseRegex(num){
@@ -130,9 +130,10 @@ class TableCsv {
 
   return arr
 }
-  
 }
 
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
 const tableRoot = document.querySelector("#csvRoot");
 const csvFileInput = document.querySelector("#csvFileInput");
 const tableCsv = new TableCsv(tableRoot);
@@ -147,8 +148,32 @@ csvFileInput.addEventListener("change", (e) => {
     });
     var gateWidth = document.querySelector('#gateWidth').value;
     var numFingers = document.querySelector('#numFingers').value;
-    tableCsv.update(TableCsv.formatArrLongTime(r,gateWidth,numFingers));
+    var newtable = TableCsv.formatArrLongTime(r,gateWidth,numFingers)
+    tableCsv.update(newtable);
+    timeValues = [];
+    JDValues = [];
+
+    for (var i=1; i<newtable.length;i++){
+      timeValues.push(Number(newtable[i][0]));
+      newtable[i][4] = "'" + newtable[i][4] + "'"
+      JDValues.push(TableCsv.regex(newtable[i][4]));
+    }
+
+    var trace1 = {
+      x: timeValues,
+      y: JDValues,
+      type: 'scatter'
+    }
+  
+    var layout = {
+      xaxis: {range: [0, 500], title: "time [s]"},
+      yaxis: {range: [0, 0.35], title: "voltage [V]"},
+    };
+
+    data = [trace1];
+    Plotly.newPlot('longPlot', data, layout);
   }
-  document.querySelector('#longTimeImage').src="static/img/MatPlotLibChart.png";
+  //document.querySelector('#longTimeImage').src="static/img/MatPlotLibChart.png";
+  
   fr.readAsText(csvFileInput.files[0]);
 });
