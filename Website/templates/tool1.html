@@ -42,7 +42,9 @@
 		<div class="col-12">
 			<h1 class="display-4">Long P-IV(t)</h1>
 		</div>
-		<p class="lead">Long time frame drain lag graphing, both JD and VD with respect logarithmic time are plotted using the data inputed from the CSV section on the right.</p>
+		<p class="lead">Long time frame drain lag graphing, both JD and VD with respect to time are plotted using the data inputed from the CSV section on the left.
+			please remove everything from the CSV other than the table header and data body.
+		</p>
 	</div>
 </div>
 </div>
@@ -50,37 +52,68 @@
 <!--"table-bordered table-hover table-responsive CSVTable"-->
 <div class="container-fluid">
 <div class="row">
-	<div class="col-lg-4">
-		<h2 style="text-align: center ;">CSV Data</h2>
+	<div class="col-lg-3">
+		<h2 style="text-align: center ; font-size: x-large;">HEMT Parameters</h2>
 		<hr>
-		<div class="col-xl-12" style="height:600px; overflow-y: scroll;">
-			<div class="input-group mb-3">
-				<div class="input-group-prepend">
-				<span class="input-group-text" id="basic-addon1">Gate Width </span>
-				</div>
-			<input type="number" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="gateWidthLong">
+		<div class="input-group input-group-sm mb-3">
+			<div class="input-group-prepend">
+			<span class="input-group-text" id="basic-addon1">Gate Width </span>
 			</div>
-			<div class="input-group mb-3">
-				<div class="input-group-prepend">
-				<span class="input-group-text"  id="basic-addon1"># Fingers &nbsp;&nbsp;</span>
-				</div>
-			<input type="number" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="numFingersLong">
+		<input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="gateWidthLong">
+		</div>
+		<div class="input-group input-group-sm mb-3">
+			<div class="input-group-prepend">
+			<span class="input-group-text"  id="basic-addon1"># Fingers &nbsp;&nbsp;</span>
 			</div>
-			<div class="input-group" style="padding-bottom: 1rem;">
-				<div class="custom-file">
-					<input type="file" class="custom-file-input" id="csvFileInputLong">
-					<label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-				</div>
+		<input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="numFingersLong">
+		</div>
+		<h2 style="text-align: center ; font-size: x-large;">Plot Settings</h2>
+		<hr>
+		<div class="input-group input-group-sm mb-3">
+			<div class="input-group-prepend">
+			<span class="input-group-text" id="basic-addon1">Set 0 Point</span>
 			</div>
+		<input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="zeroPointLong">
+		<div class="input-group-append">
+			<button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="updateCharts()">Replot</button>
+		  </div>
+		</div>
+		<div class="btn-group btn-group-toggle special mb-3" data-toggle="buttons" style="align-items: center;">
+			<label class="btn btn-secondary active btn-light btn-sm" onclick="showVDLong()">
+			  <input type="radio" name="options" id="showVDLong" autocomplete="off" checked onclick="showVDLong()"> Show VD
+			</label>
+			<label class="btn btn-secondary btn-light btn-sm" onclick="ignoreVDLong()">
+			  <input type="radio" name="options" id="ignoreVDLong" autocomplete="off" onclick="ignoreVDLong()"> Ignore VD
+			</label>
+		</div>
+		<h2 style="text-align: center ; font-size: x-large;">CSV Data</h2>
+		<hr>
+		<div class="input-group input-group-sm" style="padding-bottom: 1rem;">
+			<div class="custom-file">
+				<input type="file" class="custom-file-input" id="csvFileInputLong">
+				<label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+			</div>
+		</div>
+		<script>
+            $('#csvFileInputLong').on('change',function(){
+                //get the file name
+                var fileName = $(this).val();
+                //replace the "Choose a file" label
+                $(this).next('.custom-file-label').html(fileName.slice(12));
+            })
+        </script>
+
+		<div class="col-xl-12" style="height:830px; overflow-y: scroll;">
 			<table id="csvRootLong" class="table table-data table-bordered table-hover padding"></table>
 			<script type="text/javascript" src="{{ url_for('static', filename='js/TableCsv.js')}}"></script>
 		</div>
 	</div>
-	<div class="chart-area col-lg-8">
-		<h2 style="text-align: center ;">VD & JD vs Logarithmic Time</h2>
+	<div class="chart-area col-lg-9">
+		<h2 style="text-align: center ; font-size: x-large;">Voltage and Current Density Plots</h2>
 		<hr>
 		<script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
 		<div id="longPlot"></div>
+		<div id="longPlot2"></div>
 	</div>
 </div>
 </div>

@@ -94,11 +94,13 @@ hr {
   max-height: 600px;
 }
 
+.btn-group.special {
+  display: flex;
+}
 
-
-
-
-
+.special .btn {
+  flex: 1
+}
 /*
 Extra small (xs) devices (portrait phones, less than 576px)
 No media query since this is the default in Bootstrap

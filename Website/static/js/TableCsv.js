@@ -88,12 +88,12 @@ class TableCsv {
     if (Math.abs(num)>0.001) {
       num = num*1000;
       num = num.toString()
-      return num.slice(0,1) == "-" ? num.toString().slice(0,4) + "m" : num.toString().slice(0,3) + "m";
+      return num.slice(0,1) == "-" ? num.toString().slice(0,6) + "m" : num.toString().slice(0,5) + "m";
     } else {
       if (Math.abs(num)>0.00001) {
         num = num*1000000
         num = num.toString()
-        return num.slice(0,1) == "-" ? num.toString().slice(0,4) + "u" : num.toString().slice(0,3) + "u";
+        return num.slice(0,1) == "-" ? num.toString().slice(0,6) + "u" : num.toString().slice(0,5) + "u";
       }
     }
   }
@@ -110,35 +110,55 @@ class TableCsv {
   arr[0].push("JD");
   const devicesize = (gateWidth*numFingers)/1000;
   for (var i = arr.length-1; i > 0; i--){
-    if (arr[i][2] < 1) {
-      arr.splice(i,1)
-    } else {
     arr[i].push(TableCsv.reverseRegex(TableCsv.regex(arr[i][0]) / devicesize))
     arr[i][0] == 0 ? 0 : arr[i][0] = arr[i][0].toString().slice(1,-1);
     arr[i][1] == 0 ? 0 : arr[i][1] = arr[i][1].toString().slice(1,-1);
-    }
   }
 
-  arr[0].splice(3,1);
+  arr[0].splice(1,1);
+  arr[0].splice(2,1);
   arr[0].splice(0,0,"Time");
   var time = 0.0;
   for(var i = 1; i <arr.length; i++){
-    arr[i].splice(3,1);
+    arr[i].splice(1,1);
+    arr[i].splice(2,1);
     arr[i].splice(0,0,time);
     time += 0.5;
   }
 
   return arr
 }
+
+static getSecondFive(arr){
+  var seen40 = false;
+  for(var i=0;i<arr.length;i++){
+    if(Number(arr[i][2])>30){
+      seen40 = true;
+    } else if ((seen40) && Number((arr[i][2])<10)){
+      return i;
+    }
+  }
+}
+
 }
 
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
-const tableRoot = document.querySelector("#csvRootLong");
-const csvFileInput = document.querySelector("#csvFileInputLong");
-const tableCsv = new TableCsv(tableRoot);
+const tableCsv = new TableCsv(document.querySelector("#csvRootLong"));
 
-csvFileInput.addEventListener("change", (e) => {
+document.querySelector("#csvFileInputLong").addEventListener("change", (e) => {
+  updateCharts();
+});
+
+function showVDLong() {
+  Plotly.restyle(document.getElementById("longPlot"), {"visible": 'true'}, [1]);
+} 
+
+function ignoreVDLong() {
+  Plotly.restyle(document.getElementById("longPlot"), {"visible": 'legendonly'}, [1]);
+} 
+
+function updateCharts() {
   tableCsv.clear();
   const fr = new FileReader();
   fr.onloadend=e=>{
@@ -148,31 +168,82 @@ csvFileInput.addEventListener("change", (e) => {
     });
     var gateWidth = document.querySelector('#gateWidthLong').value;
     var numFingers = document.querySelector('#numFingersLong').value;
+    var zeroPoint = document.querySelector('#zeroPointLong').value;
     var newtable = TableCsv.formatArrLongTime(r,gateWidth,numFingers)
     tableCsv.update(newtable);
     timeValues = [];
     JDValues = [];
+    VDValues = [];
 
+
+    //placing values in arrays for first chart
     for (var i=1; i<newtable.length;i++){
       timeValues.push(Number(newtable[i][0]));
-      newtable[i][4] = "'" + newtable[i][4] + "'"
-      JDValues.push(TableCsv.regex(newtable[i][4]));
+      JDValues.push(TableCsv.regex("'" + newtable[i][3] + "'"));
+      VDValues.push(Number(newtable[i][2]));
     }
 
     var trace1 = {
       x: timeValues,
       y: JDValues,
+      name: 'JD', //displacemenet current density
       type: 'scatter'
     }
-  
-    var layout = {
-      xaxis: {range: [0, 500], title: "time [s]"},
-      yaxis: {range: [0, 0.35], title: "voltage [V]"},
+
+    var trace2 ={
+      x: timeValues,
+      y: VDValues,
+      name: 'VD', //drain voltage
+      type: 'scatter',
+      yaxis: 'y2'
+    }
+
+    var layout1 = {
+      xaxis: {title: 'Time [s]'},
+      yaxis: {title: 'Current Density [A/m^2]'},
+      yaxis2: {
+        title: 'Drain Voltage [V]',
+        overlaying: 'y',
+        side: 'right'
+      }
+    }
+
+    //placing values in arr for second chart
+    var start = TableCsv.getSecondFive(newtable)-2;
+    if (zeroPoint!=""){
+      var start = (Number(document.querySelector('#zeroPointLong').value) * 2) -1;
+    }
+    var time = 0;
+    timeValues2 = [];
+    JDValues2 = [];
+    newtable = newtable.slice(start);
+    for(var i = 1; i<newtable.length; i++){
+      timeValues2.push(time);
+      JDValues2.push(TableCsv.regex("'" + newtable[i][3] + "'"));
+      time += 0.5;
+    }
+
+    var trace3 = {
+      x: timeValues2,
+      y: JDValues2,
+      name: 'JD', //displacemenet current density
+      type: 'scatter'
+    }
+
+    var layout2 = {
+      xaxis: {
+        type: 'log',
+        title: 'Time[s]'
+      },
+      yaxis: {
+        title: 'Current Density [A/m^2]'
+      }
     };
 
-    data = [trace1];
-    Plotly.newPlot('longPlot', data, layout);
+    data1 = [trace1, trace2]
+    data2 = [trace3]
+    Plotly.newPlot('longPlot', data1, layout1);
+    Plotly.newPlot('longPlot2', data2, layout2);
   }
-  //document.querySelector('#longTimeImage').src="static/img/MatPlotLibChart.png";
-  fr.readAsText(csvFileInput.files[0]);
-});
+  fr.readAsText(document.querySelector("#csvFileInputLong").files[0]);
+} 
