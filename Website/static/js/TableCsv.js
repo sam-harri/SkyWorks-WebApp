@@ -141,7 +141,7 @@ static formatArrShortTime(arr,gateWidth,numFingers){
   for(var i = 1; i<arr.length; i++){
     arr[i].splice(0,2);
     arr[i].splice(0,0,time);
-    arr[i][2] = parseFloat(arr[i][2]).toPrecision(4);
+    arr[i][2] = parseFloat(arr[i][2]).toPrecision(5);
     arr[i].push(arr[i][2]/devicesize);
     time += 1;
   }
