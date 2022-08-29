@@ -89,12 +89,14 @@ class TableCsv {
       num = num*1000;
       num = num.toString()
       return num.slice(0,1) == "-" ? num.toString().slice(0,6) + "m" : num.toString().slice(0,5) + "m";
-    } else {
-      if (Math.abs(num)>0.00001) {
+    } else if (Math.abs(num)>0.000001) {
         num = num*1000000
         num = num.toString()
         return num.slice(0,1) == "-" ? num.toString().slice(0,6) + "u" : num.toString().slice(0,5) + "u";
-      }
+    } else if (Math.abs(num)>0.000000001){
+      num = num*1000000000
+      num = num.toString()
+      return num.slice(0,1) == "-" ? num.toString().slice(0,6) + "n" : num.toString().slice(0,5) + "n";
     }
   }
 
@@ -129,12 +131,39 @@ class TableCsv {
   return arr
 }
 
-static getSecondFive(arr){
+static formatArrShortTime(arr,gateWidth,numFingers){
+  const devicesize = (gateWidth*numFingers)/1000;
+  console.log(devicesize)
+  arr[0].splice(0,2)
+  arr[0].splice(0,0,"Time")
+  arr[0].push("JD")
+  var time = 0;
+  for(var i = 1; i<arr.length; i++){
+    arr[i].splice(0,2);
+    arr[i].splice(0,0,time);
+    arr[i][2] = parseFloat(arr[i][2]).toPrecision(4);
+    arr[i].push(arr[i][2]/devicesize);
+    time += 1;
+  }
+
+  return arr
+}
+
+static regexArrShortTime(arr){
+  for(var i = 1; i < arr.length; i++){
+    arr[i][1] = arr[i][1].toString().slice(0,4); //VD
+    arr[i][2] = TableCsv.reverseRegex(arr[i][2]); //ID
+    arr[i][3] = TableCsv.reverseRegex(arr[i][3]);//JD
+  }
+  return arr
+}
+
+static getSecondFive(arr,index){
   var seen40 = false;
   for(var i=0;i<arr.length;i++){
-    if(Number(arr[i][2])>30){
+    if(Number(arr[i][index])>30){
       seen40 = true;
-    } else if ((seen40) && Number((arr[i][2])<10)){
+    } else if ((seen40) && Number((arr[i][index])<10)){
       return i;
     }
   }
@@ -144,22 +173,10 @@ static getSecondFive(arr){
 
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
-const tableCsv = new TableCsv(document.querySelector("#csvRootLong"));
 
-document.querySelector("#csvFileInputLong").addEventListener("change", (e) => {
-  updateCharts();
-});
-
-function showVDLong() {
-  Plotly.restyle(document.getElementById("longPlot"), {"visible": 'true'}, [1]);
-} 
-
-function ignoreVDLong() {
-  Plotly.restyle(document.getElementById("longPlot"), {"visible": 'legendonly'}, [1]);
-} 
-
-function updateCharts() {
-  tableCsv.clear();
+function updateChartsLong() {
+  const tableCsvLong = new TableCsv(document.querySelector("#csvRootLong"));
+  tableCsvLong.clear();
   const fr = new FileReader();
   fr.onloadend=e=>{
     let r = fr.result.split("\n").
@@ -170,7 +187,8 @@ function updateCharts() {
     var numFingers = document.querySelector('#numFingersLong').value;
     var zeroPoint = document.querySelector('#zeroPointLong').value;
     var newtable = TableCsv.formatArrLongTime(r,gateWidth,numFingers)
-    tableCsv.update(newtable);
+    //need to rev regex values first
+    tableCsvLong.update(newtable);
     timeValues = [];
     JDValues = [];
     VDValues = [];
@@ -209,9 +227,11 @@ function updateCharts() {
     }
 
     //placing values in arr for second chart
-    var start = TableCsv.getSecondFive(newtable)-2;
+    var start = TableCsv.getSecondFive(newtable,2)-2;
     if (zeroPoint!=""){
-      var start = (Number(document.querySelector('#zeroPointLong').value) * 2) -1;
+      var start = (Number(document.querySelector('#zeroPointLong').value) * 2)-1;
+    } else {
+      document.querySelector('#zeroPointLong').value = (start/2 + 0.5).toString();
     }
     var time = 0;
     timeValues2 = [];
@@ -246,4 +266,83 @@ function updateCharts() {
     Plotly.newPlot('longPlot2', data2, layout2);
   }
   fr.readAsText(document.querySelector("#csvFileInputLong").files[0]);
+} 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function updateChartsShort() {
+  const tableCsvLong = new TableCsv(document.querySelector("#csvRootShort"));
+  tableCsvLong.clear();
+  const fr = new FileReader();
+  fr.onloadend=e=>{
+    let r = fr.result.split("\n").
+    map(e=>{
+      return e.split(",")
+    });
+    var gateWidth = document.querySelector('#gateWidthShort').value;
+    var numFingers = document.querySelector('#numFingersShort').value;
+    var zeroPoint = document.querySelector('#zeroPointShort').value;
+    var newtable = TableCsv.formatArrShortTime(r,gateWidth,numFingers)
+    tableCsvLong.update(TableCsv.regexArrShortTime(newtable));
+
+    //placing values in arr for second chart
+    var start = TableCsv.getSecondFive(newtable,1)-2;
+    if (zeroPoint!=""){
+      var start = (Number(document.querySelector('#zeroPointShort').value)) -1;
+    } else {
+      document.querySelector('#zeroPointShort').value = (start + 1).toString();
+    }
+    var time = 0;
+    timeValues = [];
+    JDValues = [];
+    newtable = newtable.slice(start);
+    for(var i = 1; i<newtable.length; i++){
+      timeValues.push(time);
+      JDValues.push(TableCsv.regex("'" + newtable[i][3] + "'"));
+      time += 1;
+    }
+
+    var trace1 = {
+      x: timeValues,
+      y: JDValues,
+      name: 'JD', //displacemenet current density
+      type: 'scatter'
+    }
+
+    var layout1 = {
+      xaxis: {
+        type: 'log',
+        title: 'Time[s]'
+      },
+      yaxis: {
+        title: 'Current Density [A/m^2]',
+        rangemode: 'tozero'
+      }
+    };
+
+    data1 = [trace1]
+    Plotly.newPlot('shortPlot', data1, layout1);
+  }
+  fr.readAsText(document.querySelector("#csvFileInputShort").files[0]);
+} 
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+document.querySelector("#csvFileInputLong")?.addEventListener("change", () => {
+  updateChartsLong();
+});
+
+document.querySelector("#csvFileInputShort")?.addEventListener("change", () => {
+  updateChartsShort();
+});
+
+function showVDLong() {
+  Plotly.restyle(document.getElementById("longPlot"), {"visible": 'true'}, [1]);
+} 
+
+function ignoreVDLong() {
+  Plotly.restyle(document.getElementById("longPlot"), {"visible": 'legendonly'}, [1]);
 } 

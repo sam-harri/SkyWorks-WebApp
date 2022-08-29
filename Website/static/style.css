@@ -71,7 +71,7 @@ hr {
 }
 
 .logos img {
-  max-width: 300px;
+  max-width: 350px;
   max-height: 200px;
   padding-bottom: 1rem;
 }
@@ -101,6 +101,18 @@ hr {
 .special .btn {
   flex: 1
 }
+
+a.nostyle:link {
+  text-decoration: inherit;
+  color: inherit;
+}
+
+a.nostyle:visited {
+  text-decoration: inherit;
+  color: inherit;
+}
+
+
 /*
 Extra small (xs) devices (portrait phones, less than 576px)
 No media query since this is the default in Bootstrap

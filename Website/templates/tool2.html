@@ -36,5 +36,74 @@
 </div>
 </nav>
 <!--- Tool Description -->
+<div class="container-fluid">
+	<div class="row jumbotron">
+		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
+			<div class="col-12">
+				<h1 class="display-4" id="tool2">Short P-IV(t)</h1>
+			</div>
+			<p class="lead">Short time frame drain lag graphing, both JD respect to time is plotted using the data inputed from the CSV section on the left.
+				please remove everything from the CSV other than the table header and data body.
+			</p>
+		</div>
+	</div>
+</div>
 
-<!--- {{ url_for('static', filename='img/MatPlotLibChart.png')}} -->
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-3">
+			<h2 style="text-align: center ; font-size: x-large;">HEMT Parameters</h2>
+			<hr>
+			<div class="input-group input-group-sm mb-3">
+				<div class="input-group-prepend">
+				<span class="input-group-text" id="basic-addon1">Gate Width </span>
+				</div>
+			<input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="gateWidthShort">
+			</div>
+			<div class="input-group input-group-sm mb-3">
+				<div class="input-group-prepend">
+				<span class="input-group-text"  id="basic-addon1"># Fingers &nbsp;&nbsp;</span>
+				</div>
+			<input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="numFingersShort">
+			</div>
+			<h2 style="text-align: center ; font-size: x-large;">Plot Settings</h2>
+			<hr>
+			<div class="input-group input-group-sm mb-3">
+				<div class="input-group-prepend">
+				<span class="input-group-text" id="basic-addon1">Set 0 Point</span>
+				</div>
+			<input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="zeroPointShort">
+			<div class="input-group-append">
+				<button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="updateChartsShort()">Replot</button>
+			  </div>
+			</div>
+			<h2 style="text-align: center ; font-size: x-large;">CSV Data</h2>
+			<hr>
+			<div class="input-group input-group-sm" style="padding-bottom: 1rem;">
+				<div class="custom-file">
+					<input type="file" class="custom-file-input" id="csvFileInputShort">
+					<label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+				</div>
+			</div>
+			<script>
+				$('#csvFileInputShort').on('change',function(){
+					//get the file name
+					var fileName = $(this).val();
+					//replace the "Choose a file" label
+					$(this).next('.custom-file-label').html(fileName.slice(12));
+				})
+			</script>
+	
+			<div class="col-xl-12" style="height:830px; overflow-y: scroll;">
+				<table id="csvRootShort" class="table table-data table-bordered table-hover padding"></table>
+				<script type="text/javascript" src="{{ url_for('static', filename='js/TableCsv.js')}}"></script>
+			</div>
+		</div>
+		<div class="chart-area col-lg-9">
+			<h2 style="text-align: center ; font-size: x-large;">Current Density Plot</h2>
+			<hr>
+			<script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
+			<div id="shortPlot"></div>
+		</div>
+	</div>
+	</div>

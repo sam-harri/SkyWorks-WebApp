@@ -15,7 +15,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top py-3">
 <div class="container-fluid">
-	<a class="navbar-brand" href="#"><img src="{{ url_for('static', filename='img/SkyWorksLogoFull.png')}}" style="width:110px"></a>
+	<a class="navbar-brand"><img src="{{ url_for('static', filename='img/SkyWorksLogoFull.png')}}" style="width:110px"></a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
 		<span class="navbar-toggler-icon"></span>
 	</button>
@@ -36,38 +36,18 @@
 </nav>
 <!--- Image Slider -->
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-	<ol class="carousel-indicators">
-	  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-	  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-	  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-	</ol>
-
-	<div class="carousel-inner">
+	<div class="carousel-inner" style="max-height: 550px;">
 	  <div class="carousel-item active">
 		<img src="{{ url_for('static', filename='img/SkyWorks1.jpg')}}" class="w-100">
 		<div class="carousel-caption d-none d-md-block">
 			<h1 class="display-2">Faja Tool</h1>
 			<h3> Drain Lag Modelling</h3>
-			<button type="button" class=" btn btn-outline-light btn-lg">How To</button>
+			<button type="button" class=" btn btn-outline-light btn-lg" onClick="document.getElementById('howToUse').scrollIntoView({ behavior: 'smooth' });">How To</button>
+			<button type="button" class=" btn btn-outline-light btn-lg" onClick="document.getElementById('toolSelection').scrollIntoView({ behavior: 'smooth' });">Tool Selection</button>
 		</div>
 	  </div>
-	  <div class="carousel-item">
-		<img src="{{ url_for('static', filename='img/SkyWorks2.jpeg')}}" class="w-100">
-	  </div>
-	  <div class="carousel-item">
-		<img src="{{ url_for('static', filename='img/SkyWorks3.jpeg')}}" class="w-100">
-	  </div>
 	</div>
-
-	<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-	  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-	  <span class="sr-only">Previous</span>
-	</a>
-	<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-	  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-	  <span class="sr-only">Next</span>
-	</a>
-  </div>
+</div>
 
 <!--- Jumbotron -->
 <div class="container-fluid">
@@ -84,14 +64,14 @@
 </div>
 
 <!--- Welcome Section -->
-<div class="container fluid padding">
+<div class="container fluid padding" id="toolSelection">
 <div class="row welcome text-center">
 	<div class="col-12">
-		<h1 class="display-4">Built with ease.</h1>
+		<h1 class="display-4">Tool Selection</h1>
 	</div>
 	<hr>
 	<div class="col-12">
-		<p>Built to be reliable, scalable, and maintainable using only free and open-source libraries.  </p>
+		<p>Simply click anywhere on the image or description of each tool to be redirected.</p>
 	</div>
 </div>
 </div>
@@ -100,63 +80,52 @@
 <div class="container fluid padding">
 <div class="row text-center padding logos">
 	<div class="col-xs-12 col-sm-6 col-md-4">
-		<img class="logo" src="{{ url_for('static', filename='img/HTML5Logo.png')}}">
-		<h3>HTML5</h3>
-		<p>Built with the most recent version of HTML, HTML5</p>
+		<a href="http://127.0.0.1:5000/tool1" class="nostyle">
+			<img class="logo" src="{{ url_for('static', filename='img/Tool1Logo.png')}}">
+			<h3>Long P-VI(t)</h3>
+			<p>JD and VD vs Linear and Logarithmic Time</p>
+		</a>
 	</div>
 	<div class="col-xs-12 col-sm-6 col-md-4">
-		<img class="logo" src="{{ url_for('static', filename='img/CSS3Logo.png')}}">
-		<h3>CSS3</h3>
-		<p>Built with the most recent version of CSS, HTML3</p>
+		<a href="http://127.0.0.1:5000/tool2" class="nostyle">
+			<img class="logo" src="{{ url_for('static', filename='img/Tool2Logo.png')}}">
+			<h3>Short P-VT(t)</h3>
+			<p>JD vs Logarithmic Time</p>
+		</a>
 	</div>
 	<div class="col-xs-12 col-sm-6 col-md-4">
-		<img class="logo" src="{{ url_for('static', filename='img/BootStrapLogo.png')}}">
-		<h3>BootStrap4</h3>
-		<p>beep beep pooop pooop togger butt</p>
-	</div>
-	<div class="col-xs-12 col-sm-6 col-md-4">
-		<img class="logo" src="{{ url_for('static', filename='img/FlaskLogo.png')}}">
-		<h3>Flask</h3>
-		<p>beep beep pooop pooop togger butt</p>
-	</div>
-	<div class="col-xs-12 col-sm-6 col-md-4">
-		<img class="logo" src="{{ url_for('static', filename='img/MatPlotLibLogo.png')}}">
-		<h3>MatPlotLib</h3>
-		<p>beep beep pooop pooop togger butt</p>
-	</div>
-	<div class="col-xs-12 col-sm-6 col-md-4">
-		<img class="logo" src="{{ url_for('static', filename='img/PandasLogo.png')}}">
-		<h3>Pandas</h3>
-		<p>beep beep pooop pooop togger butt</p>
+		<img class="logo" src="{{ url_for('static', filename='img/Tool1Logo.png')}}">
+		<h3>Dual P-IV(t)</h3>
+		<p>JD vs Logarithmic Time across 9 orders of magnitude</p>
 	</div>
 </div>
 <hr class="my-4">
 </div>
 
 <!--- Fixed background -->
-<section id="features">
-<div class="container padding">
-
+<div>
+	<section id="features">
+		<div class="container padding"></div>
+	</section>
 </div>
-</section>
 
 <!--- How to Use Top -->
 <p class="padding"></p>
-<div class="container fluid padding">
+<div class="container fluid padding" id="howToUse">
 <div class="row welcome text-center">
 	<div class="col-12">
 		<h1 class="display-4">How To Use</h1>
 	</div>
 	<hr>
 	<div class="col-12">
-		<p>The basics of navigating and making use of the application to its full potential</p>
+		<p>Step by Step process of using the application and its tools</p>
 	</div>
 </div>
 </div>
 
 <!--- How to Use Body -->
 <div class="container-fluid">
-<div class="row text-center padding">
+<div class="row text-center padding howToUse">
 
 </div>
 </div>
