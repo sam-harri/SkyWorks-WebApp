@@ -57,6 +57,10 @@ html, body {
   padding-bottom: 2rem;
 }
 
+.paddingtop {
+  padding-top: .75rem;
+}
+
 .welcome {
   width: 75%;
   margin: 0 auto;
@@ -112,7 +116,14 @@ a.nostyle:visited {
   color: inherit;
 }
 
+.outline {
+  border: 1px solid grey;
+  margin-bottom: 20px;
+}
 
+.nav-link {
+  color: grey;
+}
 /*
 Extra small (xs) devices (portrait phones, less than 576px)
 No media query since this is the default in Bootstrap

@@ -8,7 +8,6 @@
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 	<link href="{{ url_for('static', filename='style.css')}}" rel="stylesheet">
 </head>
 <body>
@@ -73,9 +72,9 @@
 			<hr>
 			<div class="input-group input-group-sm mb-3">
 				<div class="input-group-prepend">
-				<span class="input-group-text" id="basic-addon1">Set 0 Point</span>
+					<span class="input-group-text" id="basic-addon1">Set 0 Point</span>
 				</div>
-			<input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="zeroPointShort">
+				<input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="zeroPointShort">
 			<div class="input-group-append">
 				<button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="updateChartsShort()">Replot</button>
 			  </div>
@@ -97,7 +96,7 @@
 				})
 			</script>
 	
-			<div class="col-xl-12" style="height:830px; overflow-y: scroll;">
+			<div class="col-xl-12" style="height:600px; overflow-y: scroll;">
 				<table id="csvRootShort" class="table table-data table-bordered table-hover padding"></table>
 				<script type="text/javascript" src="{{ url_for('static', filename='js/TableCsv.js')}}"></script>
 			</div>
@@ -109,4 +108,4 @@
 			<div id="shortPlot"></div>
 		</div>
 	</div>
-	</div>
+</div>

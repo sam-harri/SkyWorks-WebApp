@@ -324,7 +324,47 @@ function updateChartsShort() {
   fr.readAsText(document.querySelector("#csvFileInputShort").files[0]);
 } 
 
+function showTableShort() {
+  const tableCsvLong = new TableCsv(document.querySelector("#csvRootDualShort"));
+  tableCsvLong.clear();
+  const fr = new FileReader();
+  fr.onloadend=e=>{
+    let r = fr.result.split("\n").
+    map(e=>{
+      return e.split(",")
+    });
+    var gateWidth = document.querySelector('#gateWidthDual').value;
+    var numFingers = document.querySelector('#numFingersDual').value;
+    var newtable = TableCsv.formatArrShortTime(r,gateWidth,numFingers)
+    tableCsvLong.update(TableCsv.regexArrShortTime(newtable));
+  }
+  fr.readAsText(document.querySelector("#csvFileInputDualShort").files[0]);
+} 
 
+function showTableLong() {
+  const tableCsvLong = new TableCsv(document.querySelector("#csvRootDualLong"));
+  tableCsvLong.clear();
+  const fr = new FileReader();
+  fr.onloadend=e=>{
+    let r = fr.result.split("\n").
+    map(e=>{
+      return e.split(",")
+    });
+    var gateWidth = document.querySelector('#gateWidthDual').value;
+    var numFingers = document.querySelector('#numFingersDual').value;
+    var newtable = TableCsv.formatArrLongTime(r,gateWidth,numFingers)
+    tableCsvLong.update(newtable);
+  }
+  fr.readAsText(document.querySelector("#csvFileInputDualLong").files[0]);
+} 
+
+function showVDLong() {
+  Plotly.restyle(document.getElementById("longPlot"), {"visible": 'true'}, [1]);
+} 
+
+function ignoreVDLong() {
+  Plotly.restyle(document.getElementById("longPlot"), {"visible": 'legendonly'}, [1]);
+} 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -339,10 +379,10 @@ document.querySelector("#csvFileInputShort")?.addEventListener("change", () => {
   updateChartsShort();
 });
 
-function showVDLong() {
-  Plotly.restyle(document.getElementById("longPlot"), {"visible": 'true'}, [1]);
-} 
+document.querySelector("#csvFileInputDualShort")?.addEventListener("change", () => {
+  showTableShort();
+});
 
-function ignoreVDLong() {
-  Plotly.restyle(document.getElementById("longPlot"), {"visible": 'legendonly'}, [1]);
-} 
+document.querySelector("#csvFileInputDualLong")?.addEventListener("change", () => {
+  showTableLong();
+});
