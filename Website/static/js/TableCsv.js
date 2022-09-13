@@ -133,7 +133,6 @@ class TableCsv {
 
 static formatArrShortTime(arr,gateWidth,numFingers){
   const devicesize = (gateWidth*numFingers)/1000;
-  console.log(devicesize)
   arr[0].splice(0,2)
   arr[0].splice(0,0,"Time")
   arr[0].push("JD")
@@ -256,7 +255,8 @@ function updateChartsLong() {
         title: 'Time[s]'
       },
       yaxis: {
-        title: 'Current Density [A/m^2]'
+        title: 'Current Density [A/m^2]',
+        rangemode: 'tozero'
       }
     };
 
@@ -365,11 +365,132 @@ function showVDLong() {
 function ignoreVDLong() {
   Plotly.restyle(document.getElementById("longPlot"), {"visible": 'legendonly'}, [1]);
 } 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function getDataDualLong() {
+  const fr = new FileReader();
+  fr.onloadend=e=>{
+    let r = fr.result.split("\n").
+    map(e=>{
+      return e.split(",")
+    });
+    var gateWidth = document.querySelector('#gateWidthDual').value;
+    var numFingers = document.querySelector('#numFingersDual').value;
+    var zeroPoint = document.querySelector('#zeroPointDualLong').value;
+    var newtable = TableCsv.formatArrLongTime(r,gateWidth,numFingers)
+
+    //placing values in arr for second chart
+    var start = TableCsv.getSecondFive(newtable,2)-2;
+    if (zeroPoint!=""){
+      start = (Number(document.querySelector('#zeroPointDualLong').value) * 2)-1;
+    } else {
+      document.querySelector('#zeroPointDualLong').value = (start/2 + 0.5).toString();
+    }
+    var time = 0;
+    timeValues = [];
+    JDValues = [];
+    newtable = newtable.slice(start);
+    for(var i = 1; i<newtable.length; i++){
+      timeValues.push(time);
+      JDValues.push(TableCsv.regex("'" + newtable[i][3] + "'"));
+      time += 500000;
+    }
+
+    /*
+    var trace1 = {
+      x: timeValues,
+      y: JDValues,
+      name: 'JD', //displacemenet current density
+      type: 'scatter'
+    }
+    */
+  }
+  fr.readAsText(document.querySelector("#csvFileInputDualLong").files[0]);
+  return [timeValues,JDValues]
+}
+
+function getDataDualShort() {
+  const fr = new FileReader();
+  fr.onloadend=e=>{
+    let r = fr.result.split("\n").
+    map(e=>{
+      return e.split(",")
+    });
+    var gateWidth = document.querySelector('#gateWidthDual').value;
+    var numFingers = document.querySelector('#numFingersDual').value;
+    var zeroPoint = document.querySelector('#zeroPointDualShort').value;
+    var newtable = TableCsv.formatArrShortTime(r,gateWidth,numFingers)
+
+    //placing values in arr for second chart
+    var start = TableCsv.getSecondFive(newtable,1)-2;
+    if (zeroPoint!=""){
+      var start = (Number(document.querySelector('#zeroPointDualShort').value)) -1;
+    } else {
+      document.querySelector('#zeroPointDualShort').value = (start + 1).toString();
+    }
+    var time = 0;
+    timeValues = [];
+    JDValues = [];
+    newtable = newtable.slice(start);
+    for(var i = 1; i<newtable.length; i++){
+      timeValues.push(time);
+      JDValues.push(TableCsv.regex("'" + newtable[i][3] + "'"));
+      time += 1;
+    }
+
+    /*
+    var trace1 = {
+      x: timeValues,
+      y: JDValues,
+      name: 'JD', //displacemenet current density
+      type: 'scatter'
+    }
+    */
+  }
+  fr.readAsText(document.querySelector("#csvFileInputDualShort").files[0]);
+  return [timeValues,JDValues]
+}
+
+function plotDual(){
+  short = getDataDualShort();
+  long = getDataDualLong();
+
+  var trace1 = {
+    x: short[0],
+    y: short[1],
+    type: 'scatter'
+  }
+
+  var trace2 = {
+    x: long[0],
+    y: long[1],
+    type: 'scatter'
+  }
 
 
+  var layout = {
+    xaxis: {
+      type: 'log',
+      title: 'Time[s]'
+    },
+    yaxis: {
+      title: 'Current Density [A/m^2]',
+      rangemode: 'tozero'
+    }
+  };
+
+  data = [trace1, trace2]
+  Plotly.newPlot('dualPlot', data, layout);
+}
+
+function calcDrainlag(){
+  var min = document.querySelector('#minJD').value;
+  var max = document.querySelector('#maxJD').value;
+
+  return (max-min)/max;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 document.querySelector("#csvFileInputLong")?.addEventListener("change", () => {
   updateChartsLong();
@@ -386,3 +507,4 @@ document.querySelector("#csvFileInputDualShort")?.addEventListener("change", () 
 document.querySelector("#csvFileInputDualLong")?.addEventListener("change", () => {
   showTableLong();
 });
+

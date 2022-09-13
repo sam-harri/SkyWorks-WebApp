@@ -72,7 +72,7 @@
 			</div>
 			<h2 style="text-align: center ; font-size: x-large;">CSV Data</h2>
 			<hr>
-            <button type="button padding" class="btn btn-light btn-block outline">Plot</button>
+            <button type="button padding" class="btn btn-light btn-block outline" onclick="plotDual()">Plot</button>
              <!--tabs-->
             <div>
                 <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
@@ -151,7 +151,37 @@
 			<h2 style="text-align: center ; font-size: x-large;">Current Density Plot</h2>
 			<hr>
 			<script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
-			<div id="dualPlot"></div>
+			<div style="min-height: 400px;" id="dualPlot"></div>
+			<h2 style="text-align: center; font-size: x-large;">Drain Lag Calculator</h2>
+			<hr>
+			<br>
+			<div class="row">
+				<div class="col">
+					<h5 style="text-align: center;">Lowest Current Density</h3>
+				</div>
+				<div class="col">
+					<h5 style="text-align: center;">Highest Current Density</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<div class="input-group mb-3">
+						<input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="minJD">
+					</div>
+				</div>
+				<div class="col">
+					<div class="input-group mb-3">
+						<input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="maxJD">
+					  </div>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col">
+					<h1 style="text-align: center; font-size: 120px; margin-bottom: 0; padding-bottom: 0;">45%</h1>
+					<h5 style="text-align: center; margin-top: -20px; padding-top: 0;"> drain lag </h2>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
