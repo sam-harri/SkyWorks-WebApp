@@ -166,20 +166,24 @@
 			<div class="row">
 				<div class="col">
 					<div class="input-group mb-3">
-						<input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="minJD">
+						<input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="minJD" onchange="calcDrainlag()"">
 					</div>
 				</div>
 				<div class="col">
 					<div class="input-group mb-3">
-						<input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="maxJD">
+						<input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="maxJD" onchange="calcDrainlag()">
 					  </div>
 				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col">
-					<h1 style="text-align: center; font-size: 120px; margin-bottom: 0; padding-bottom: 0;">45%</h1>
+					<h1 style="text-align: center; font-size: 120px; margin-bottom: 0; padding-bottom: 0;" id="drainLag">0%</h1>
 					<h5 style="text-align: center; margin-top: -20px; padding-top: 0;"> drain lag </h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
 				</div>
 			</div>
 		</div>

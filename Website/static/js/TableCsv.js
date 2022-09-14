@@ -409,6 +409,7 @@ function getDataDualLong() {
 }
 
 function getDataDualShort() {
+  //https://stackoverflow.com/questions/17068610/read-a-file-synchronously-in-javascript
   const fr = new FileReader();
   fr.onloadend=e=>{
     let r = fr.result.split("\n").
@@ -485,8 +486,10 @@ function plotDual(){
 function calcDrainlag(){
   var min = document.querySelector('#minJD').value;
   var max = document.querySelector('#maxJD').value;
-
-  return (max-min)/max;
+  
+  if(min!="" && max!=''){
+  document.querySelector('#drainLag').innerHTML = ((max-min * 100/max).toString()).slice(0,4) + "%";
+  }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
